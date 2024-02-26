@@ -24,4 +24,5 @@ steps:
   inputs:
     orchestratorConnection: 'Test-Personal-Uipath'
     packagesPath: '$(Build.ArtifactStagingDirectory)\Output'
-    folderName: 'My Workspace'
+    folderName: 'Shared'
+
