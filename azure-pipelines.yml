@@ -19,10 +19,10 @@ steps:
     projectJsonPath: 'project.json'
     outputType: 'Process'
     outputPath: '$(Build.ArtifactStagingDirectory)\Output'
-    
+
 - task: UiPathDeploy@4
   inputs:
     orchestratorConnection: 'Test-Personal-Uipath'
-    packagesPath: '$(Build.ArtifactStagingDirectory)\Output'
+    packagesPath: '$(Build.ArtifactStagingDirectory)\Output'''
     folderName: 'Shared'
-
+    traceLevel: 'Verbose'
