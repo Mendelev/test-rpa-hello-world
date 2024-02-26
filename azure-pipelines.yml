@@ -20,3 +20,8 @@ steps:
     outputType: 'Process'
     outputPath: '$(Build.ArtifactStagingDirectory)\Output'
     
+- task: UiPathDeploy@4
+  inputs:
+    orchestratorConnection: 'Test-Personal-Uipath'
+    packagesPath: '$(Build.ArtifactStagingDirectory)\Output'
+    environments: 'My Workspace'
