@@ -23,6 +23,6 @@ steps:
 - task: UiPathDeploy@4
   inputs:
     orchestratorConnection: 'Test-Personal-Uipath'
-    packagesPath: '$(Build.ArtifactStagingDirectory)\Output'''
+    packagesPath: '$(Build.ArtifactStagingDirectory)\Output'
     folderName: 'Shared'
     traceLevel: 'Verbose'
