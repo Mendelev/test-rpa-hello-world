@@ -24,5 +24,7 @@ steps:
   inputs:
     orchestratorConnection: 'Test-Personal-Uipath'
     packagesPath: '$(Build.ArtifactStagingDirectory)\Output'
+    createProcess: false
     folderName: 'Shared'
     traceLevel: 'Verbose'
+
