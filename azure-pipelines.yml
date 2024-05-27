@@ -3,8 +3,8 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- main
+#trigger:
+#- main
 
 pool:
   vmImage: windows-latest
@@ -15,15 +15,19 @@ steps:
     cliVersion: 'WIN_23.10.8753.32995'
 - task: UiPathPack@4
   inputs:
-    versionType: 'CurrentVersion'
+    versionType: 'AutoVersion'
     projectJsonPath: 'project.json'
     outputType: 'Process'
+    orchestratorConnection: 'Test-Personal-Uipath'
     outputPath: '$(Build.ArtifactStagingDirectory)\Output'
+    runWorkflowAnalysis: true
+    traceLevel: 'Verbose'
 
 - task: UiPathDeploy@4
   inputs:
     orchestratorConnection: 'Test-Personal-Uipath'
     packagesPath: '$(Build.ArtifactStagingDirectory)\Output'
+    createProcess: true
     folderName: 'Shared'
     traceLevel: 'Verbose'
 
