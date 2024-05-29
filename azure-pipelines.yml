@@ -6,28 +6,27 @@
 #trigger:
 #- main
 
-pool:
-  vmImage: windows-latest
+# pool:
+#   vmImage: windows-latest
 
-steps:
-- task: UiPathInstallPlatform@4
-  inputs:
-    cliVersion: 'WIN_23.10.8753.32995'
-- task: UiPathPack@4
-  inputs:
-    versionType: 'AutoVersion'
-    projectJsonPath: 'project.json'
-    outputType: 'Process'
-    orchestratorConnection: 'Test-Personal-Uipath'
-    outputPath: '$(Build.ArtifactStagingDirectory)\Output'
-    runWorkflowAnalysis: true
-    traceLevel: 'Verbose'
+# steps:
+# - task: UiPathInstallPlatform@4
+#   inputs:
+#     cliVersion: 'WIN_23.10.8753.32995'
+# - task: UiPathPack@4
+#   inputs:
+#     versionType: 'AutoVersion'
+#     projectJsonPath: 'project.json'
+#     outputType: 'Process'
+#     orchestratorConnection: 'Test-Personal-Uipath'
+#     outputPath: '$(Build.ArtifactStagingDirectory)\Output'
+#     runWorkflowAnalysis: true
+#     traceLevel: 'Verbose'
 
-- task: UiPathDeploy@4
-  inputs:
-    orchestratorConnection: 'Test-Personal-Uipath'
-    packagesPath: '$(Build.ArtifactStagingDirectory)\Output'
-    createProcess: true
-    folderName: 'Shared'
-    traceLevel: 'Verbose'
-
+# - task: UiPathDeploy@4
+#   inputs:
+#     orchestratorConnection: 'Test-Personal-Uipath'
+#     packagesPath: '$(Build.ArtifactStagingDirectory)\Output'
+#     createProcess: true
+#     folderName: 'Shared'
+#     traceLevel: 'Verbose'
