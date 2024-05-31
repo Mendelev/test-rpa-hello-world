@@ -1,0 +1,31 @@
+#trigger:
+#  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+jobs:
+- job: Job1
+  steps:
+  - checkout: self
+  - checkout: git://External-Scripts/Criar-Excluir-Maquina
+  - task: PythonScript@0
+    displayName: 'Define Variável de Ambiente'
+    inputs:
+      scriptSource: 'filePath'
+      scriptPath: 'Criar-Excluir-Maquina/teste.py'
+
+  - task: Bash@3
+    displayName: 'Tarefa subsequente'
+    inputs:
+      targetType: 'inline'
+      script: echo "Valor da variável de ambiente MY_VARIABLE é $(MY_VARIABLE)"
+
+- job: Job2
+  dependsOn: Job1
+  steps:
+  - task: Bash@3
+    displayName: 'Tarefa em outro job'
+    inputs:
+      targetType: 'inline'
+      script: echo "Valor da variável de ambiente MY_VARIABLE em outro job é $(MY_VARIABLE)"
