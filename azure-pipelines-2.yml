@@ -25,10 +25,12 @@ jobs:
 - job: RunWorkflowAnalyzer
   dependsOn: CreateMachine
   condition: succeeded('CreateMachine')
+  variables:
+    InstanceID: $[ dependencies.InitializeMachine.outputs['createMachine.INSTANCE_ID'] ]
   pool: 
     name: Workflow-Analyzer
     demands:
-    - workflow-analyzer-agent-InitializeMachine.outputs['createMachine.INSTANCE_ID']
+    - workflow-analyzer-agent-$(InstanceID)
   steps:
   - task: PowerShell@2
     inputs:
@@ -38,6 +40,8 @@ jobs:
         )\test-rpa-hello-world-main\project.json"
 - job: TerminateMachine
   dependsOn: RunWorkflowAnalyzer
+  variables:
+    InstanceID: $[ dependencies.InitializeMachine.outputs['createMachine.INSTANCE_ID'] ]
   condition: succeeded('RunWorkflowAnalyzer')
   pool:
     vmImage: 'ubuntu-latest'
