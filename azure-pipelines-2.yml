@@ -13,11 +13,12 @@ resources:
   repositories:
     - repository: templates
       type: git
-      name: External-Scripts/Criar-Excluir-Maquina
+      name: External-Scripts/template-machine
     - repository: scriptus
       endpoint: external-script-repo
       type: git
-      name: External-Scripts/Criar-Excluir-Maquina 
+      name: External-Scripts/Criar-Excluir-Maquina
+
 
 jobs:
 - template: python-script-create-vm.yml@templates  # Template reference
