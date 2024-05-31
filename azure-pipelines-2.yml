@@ -25,12 +25,12 @@ jobs:
 - job: RunWorkflowAnalyzer
   dependsOn: CreateMachine
   condition: succeeded('CreateMachine')
-  variables:
-    InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
+  #variables:
+  #  InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
   pool: 
     name: Workflow-Analyzer
     demands:
-    - workflow-analyzer-agent-$(InstanceID)
+    - agent.name -equals workflow-analyzer-agent-$[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
   steps:
   - task: PowerShell@2
     inputs:
