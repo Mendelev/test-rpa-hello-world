@@ -37,7 +37,9 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        & 'C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe' analyze -p "$Env:BUILD_SOURCESDIRECTORY \project.json"
+        $projectPath = "$Env:BUILD_SOURCESDIRECTORY"
+
+        & 'C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe' analyze -p "$projectPath\project.json"
 - job: TerminateMachine
   dependsOn: RunWorkflowAnalyzer
   variables:
