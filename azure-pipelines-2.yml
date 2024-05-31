@@ -37,11 +37,11 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        $projectPath = "$env:Build.Repository.LocalPath\test-rpa-hello-world-main
+        $projectPath = "$Env:BUILD_SOURCESDIRECTORY \test-rpa-hello-world-main
 
         Write-Host "Qualquer coisa"
 
-        dir $env:Build.Repository.LocalPath
+        dir $Env:BUILD_SOURCESDIRECTORY 
       
         Write-Host "Qualquer coisa 2"
 
