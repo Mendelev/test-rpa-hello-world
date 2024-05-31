@@ -26,7 +26,7 @@ jobs:
   dependsOn: CreateMachine
   condition: succeeded('CreateMachine')
   variables:
-    InstanceID: $[ dependencies.InitializeMachine.outputs['createMachine.INSTANCE_ID'] ]
+    InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
   pool: 
     name: Workflow-Analyzer
     demands:
@@ -41,7 +41,7 @@ jobs:
 - job: TerminateMachine
   dependsOn: RunWorkflowAnalyzer
   variables:
-    InstanceID: $[ dependencies.InitializeMachine.outputs['createMachine.INSTANCE_ID'] ]
+    InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
   condition: succeeded('RunWorkflowAnalyzer')
   pool:
     vmImage: 'ubuntu-latest'
