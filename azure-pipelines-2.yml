@@ -37,7 +37,7 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        $projectPath = "$(Build.Repository.LocalPath)\test-rpa-hello-world-main
+        $projectPath = "$env:Build.Repository.LocalPath\test-rpa-hello-world-main
       
         & 'C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe' analyze -p "${projectPath}\project.json"
 - job: TerminateMachine
