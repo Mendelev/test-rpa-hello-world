@@ -32,11 +32,12 @@ jobs:
     demands:
     - agent.name -equals workflow-analyzer-agent-$(InstanceID)
   steps:
+  - checkout: self
   - task: PowerShell@2
     inputs:
       targetType: 'inline'
       script: |
-        C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe analyze -p "$(Build.Repository.LocalPath	
+        C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe analyze -p "$($ENV:Build.Repository.LocalPath	
         )\test-rpa-hello-world-main\project.json"
 - job: TerminateMachine
   dependsOn: RunWorkflowAnalyzer
