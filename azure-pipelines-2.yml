@@ -25,6 +25,8 @@ jobs:
   - bash: |
       sleep 30s
 - job: RunWorkflowAnalyzer
+  dependsOn: CreateMachine
+  condition: succeeded('CreateMachine')
   pool: 
     name: Workflow-Analyzer
     demands:
@@ -37,6 +39,8 @@ jobs:
         C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe analyze -p "$(Build.Repository.LocalPath	
         )\test-rpa-hello-world-main\project.json"
 - job: TerminateMachine
+  dependsOn: RunWorkflowAnalyzer
+  condition: succeeded('RunWorkflowAnalyzer')
   pool:
     vmImage: 'ubuntu-latest'
   steps:
