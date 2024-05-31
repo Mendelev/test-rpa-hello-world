@@ -21,9 +21,7 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   steps:
-  - template: python-script-create-vm.yml@templates  # Template reference
-  - bash: |
-      sleep 30s
+  - template: python-script-create-vm.yml@templates  # Template reference 
 - job: RunWorkflowAnalyzer
   dependsOn: CreateMachine
   condition: succeeded('CreateMachine')
@@ -45,5 +43,3 @@ jobs:
     vmImage: 'ubuntu-latest'
   steps:
   - template: python-script-delete-vm.yml@templates
-  - bash: |
-      sleep 30s
