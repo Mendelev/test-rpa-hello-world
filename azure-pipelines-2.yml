@@ -39,8 +39,12 @@ jobs:
       script: |
         $projectPath = "$env:Build.Repository.LocalPath\test-rpa-hello-world-main
 
+        Write-Host "Qualquer coisa"
+
         dir $env:Build.Repository.LocalPath
       
+        Write-Host "Qualquer coisa 2"
+
         & 'C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe' analyze -p "${projectPath}\project.json"
 - job: TerminateMachine
   dependsOn: RunWorkflowAnalyzer
