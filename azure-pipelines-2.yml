@@ -14,10 +14,6 @@ resources:
     - repository: templates
       type: git
       name: External-Scripts/template-machine
-    - repository: scriptus
-      endpoint: external-script-repo
-      type: git
-      name: External-Scripts/Criar-Excluir-Maquina
 
 
 jobs:
