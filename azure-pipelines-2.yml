@@ -17,5 +17,29 @@ resources:
 
 
 jobs:
-- template: python-script-create-vm.yml@templates  # Template reference
-
+- job: CreateMachine
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - template: python-script-create-vm.yml@templates  # Template reference
+  - bash: |
+      sleep 30s
+- job: RunWorkflowAnalyzer
+  pool: 
+    name: Workflow-Analyzer
+    demands:
+    - workflow-analyzer-agent-InitializeMachine.outputs['createMachine.INSTANCE_ID']
+  steps:
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe analyze -p "$(Build.Repository.LocalPath	
+        )\test-rpa-hello-world-main\project.json"
+- job: TerminateMachine
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - template: python-script-delete-vm.yml@templates
+  - bash: |
+      sleep 30s
