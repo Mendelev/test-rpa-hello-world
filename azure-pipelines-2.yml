@@ -37,7 +37,7 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe analyze -p "$($ENV:Build.Repository.LocalPath	
+        C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe analyze -p "$($ENV:Build.SourcesDirectory	
         )\test-rpa-hello-world-main\project.json"
 - job: TerminateMachine
   dependsOn: RunWorkflowAnalyzer
