@@ -66,13 +66,13 @@ jobs:
     vmImage: 'ubuntu-latest'
   steps:
   - template: python-script-delete-vm.yml@template-script-machine
-- job: BuildAndPublish
-  steps:
-  - template: pack-and-publish.yml@template-uipath  # Template reference
-    parameters:
-      connection: 'Service-Connection-Name' # You need to change this with your Orchestrator Connection Name
-      vmImage: 'windows-latest' #This image works in most cases, but if you need a Cross Platform Agent, you need to change this
-      email: '$(emailToReceiveResults)'
-      FolderName: '$(FolderName)'
-      createProcessBoolean: '$(createProcessBoolean)'
+# - job: BuildAndPublish
+#   steps:
+- template: pack-and-publish.yml@template-uipath  # Template reference
+  parameters:
+    connection: 'Service-Connection-Name' # You need to change this with your Orchestrator Connection Name
+    vmImage: 'windows-latest' #This image works in most cases, but if you need a Cross Platform Agent, you need to change this
+    email: '$(emailToReceiveResults)'
+    FolderName: '$(FolderName)'
+    createProcessBoolean: '$(createProcessBoolean)'
 
