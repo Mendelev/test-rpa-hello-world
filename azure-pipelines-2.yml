@@ -23,10 +23,10 @@ variables:
 
 resources:
   repositories:
-    - repository: templates
+    - repository: template-script-machine
       type: git
       name: External-Scripts/template-machine
-    - repository: templates
+    - repository: template-uipath
       type: git
       name: Projetos/Template-Uipath-Pipeline
 
@@ -36,7 +36,7 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   steps:
-  - template: python-script-create-vm.yml@templates  # Template reference 
+  - template: python-script-create-vm.yml@template-script-machine  # Template reference 
 - job: RunWorkflowAnalyzer
   dependsOn: CreateMachine
   condition: succeeded('CreateMachine')
@@ -65,10 +65,10 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   steps:
-  - template: python-script-delete-vm.yml@templates
+  - template: python-script-delete-vm.yml@template-script-machine
 - job: BuildAndPublish
   steps:
-  - template: pack-and-publish.yml@templates  # Template reference
+  - template: pack-and-publish.yml@template-uipath  # Template reference
     parameters:
       connection: 'Service-Connection-Name' # You need to change this with your Orchestrator Connection Name
       vmImage: 'windows-latest' #This image works in most cases, but if you need a Cross Platform Agent, you need to change this
