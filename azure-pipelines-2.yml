@@ -69,6 +69,8 @@ jobs:
 # - job: BuildAndPublish
 #   steps:
 - template: pack-and-publish.yml@template-uipath  # Template reference
+  dependsOn:
+    - RunWorkflowAnalyzer
   parameters:
     connection: $(connection) # You need to change this with your Orchestrator Connection Name
     vmImage: 'windows-latest' #This image works in most cases, but if you need a Cross Platform Agent, you need to change this
