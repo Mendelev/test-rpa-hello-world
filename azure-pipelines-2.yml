@@ -83,7 +83,7 @@ jobs:
   pool:
     vmImage: 'windows-latest'
   steps:
-  - template: send-results@template-uipath
+  - template: send-results.yml@template-uipath
     parameters:
       email: '$(emailToReceiveResults)'
 
