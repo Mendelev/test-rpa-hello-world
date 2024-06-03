@@ -26,6 +26,9 @@ resources:
     - repository: templates
       type: git
       name: External-Scripts/template-machine
+    - repository: templates
+      type: git
+      name: Projetos/Template-Uipath-Pipeline
 
 
 jobs:
