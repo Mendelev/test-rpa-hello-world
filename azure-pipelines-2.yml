@@ -68,7 +68,7 @@ jobs:
   - template: python-script-delete-vm.yml@template-script-machine
 - job: BuildAndPublish
   dependsOn:
-    - RunWorkflowAnalyzer
+    - TerminateMachine
   pool:
     vmImage: 'windows-latest'
   steps:
@@ -80,6 +80,7 @@ jobs:
 - job: SendResults
   dependsOn:
     - BuildAndPublish
+  continueOnError: true
   pool:
     vmImage: 'windows-latest'
   steps:
