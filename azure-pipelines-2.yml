@@ -41,7 +41,9 @@ jobs:
 
         & 'C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe' analyze -p "$projectPath\project.json"
 - job: TerminateMachine
-  dependsOn: RunWorkflowAnalyzer
+  dependsOn:
+    - CreateMachine 
+    - RunWorkflowAnalyzer
   variables:
     InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
   condition: succeeded('RunWorkflowAnalyzer')
