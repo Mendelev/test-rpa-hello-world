@@ -74,6 +74,7 @@ jobs:
 - job: BuildAndPublish
   dependsOn:
     - TerminateMachine
+  continueOnError: true
   pool:
     vmImage: 'windows-latest'
   steps:
