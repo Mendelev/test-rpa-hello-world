@@ -24,7 +24,7 @@ variables:
 resources:
   repositories:
     - repository: template-script-machine
-      endpoint: Test-Permission
+      #endpoint: Test-Permission
       type: git
       name: External-Scripts/template-machine
       ref: main
