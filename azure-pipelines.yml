@@ -24,6 +24,7 @@ variables:
 resources:
   repositories:
     - repository: scripts-repository
+      endpoint: Test-Permission
       type: git
       name: External-Scripts/Criar-Excluir-Maquina
     - repository: template-script-machine
