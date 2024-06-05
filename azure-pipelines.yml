@@ -24,8 +24,10 @@ variables:
 resources:
   repositories:
     - repository: template-script-machine
+      endpoint: Test-Permission
       type: git
       name: External-Scripts/template-machine
+      ref: main
     - repository: template-uipath
       type: git
       name: Projetos/Template-Uipath-Pipeline
