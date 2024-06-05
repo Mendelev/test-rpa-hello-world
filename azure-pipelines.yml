@@ -27,7 +27,7 @@ resources:
       #endpoint: Test-Permission
       type: git
       name: External-Scripts/template-machine
-      ref: main
+      #ref: main
     - repository: template-uipath
       type: git
       name: Projetos/Template-Uipath-Pipeline
