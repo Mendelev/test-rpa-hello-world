@@ -6,27 +6,84 @@
 #trigger:
 #- main
 
-# pool:
-#   vmImage: windows-latest
+pool:
+  vmImage: ubuntu-latest
 
-# steps:
-# - task: UiPathInstallPlatform@4
-#   inputs:
-#     cliVersion: 'WIN_23.10.8753.32995'
-# - task: UiPathPack@4
-#   inputs:
-#     versionType: 'AutoVersion'
-#     projectJsonPath: 'project.json'
-#     outputType: 'Process'
-#     orchestratorConnection: 'Test-Personal-Uipath'
-#     outputPath: '$(Build.ArtifactStagingDirectory)\Output'
-#     runWorkflowAnalysis: true
-#     traceLevel: 'Verbose'
+variables:
+- name: connection
+  value: Test-Personal-Uipath # The name of your service connection on Azure DevOps
+- name: emailToReceiveResults
+  value: yuricamargo4@gmail.com  # The email to send the results of pipeline
+- name: FolderName #Name of the folde to publish package
+  value: Shared
+- name: createProcessBoolean
+  value: true
 
-# - task: UiPathDeploy@4
-#   inputs:
-#     orchestratorConnection: 'Test-Personal-Uipath'
-#     packagesPath: '$(Build.ArtifactStagingDirectory)\Output'
-#     createProcess: true
-#     folderName: 'Shared'
-#     traceLevel: 'Verbose'
+
+
+resources:
+  repositories:
+    - repository: template-script-machine
+      type: git
+      name: External-Scripts/template-machine
+    - repository: template-uipath
+      type: git
+      name: Projetos/Template-Uipath-Pipeline
+
+
+jobs:
+- job: CreateMachine
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - template: python-script-create-vm.yml@template-script-machine  # Template reference 
+- job: RunWorkflowAnalyzer
+  dependsOn: CreateMachine
+  condition: succeeded('CreateMachine')
+  variables:
+    InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
+  pool: 
+    name: Workflow-Analyzer
+    demands:
+    - agent.name -equals workflow-analyzer-agent-$(InstanceID)
+  steps:
+  - checkout: self
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: |
+        $projectPath = "$Env:BUILD_SOURCESDIRECTORY"
+
+        & 'C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe' analyze -p "$projectPath\project.json"
+- job: TerminateMachine
+  dependsOn:
+    - CreateMachine 
+    - RunWorkflowAnalyzer
+  variables:
+    InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
+  condition: succeeded('RunWorkflowAnalyzer')
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - template: python-script-delete-vm.yml@template-script-machine
+- job: BuildAndPublish
+  dependsOn:
+    - TerminateMachine
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - template: pack-and-publish.yml@template-uipath  # Template reference
+    parameters:
+      connection: $(connection) # You need to change this with your Orchestrator Connection Name
+      FolderName: '$(FolderName)'
+      createProcessBoolean: '$(createProcessBoolean)'
+- job: SendResults
+  dependsOn:
+    - BuildAndPublish
+  continueOnError: true
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - template: send-results.yml@template-uipath
+    parameters:
+      email: '$(emailToReceiveResults)'
