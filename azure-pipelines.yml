@@ -27,6 +27,7 @@ resources:
       endpoint: Test-Permission
       type: git
       name: External-Scripts/Criar-Excluir-Maquina
+      ref: main
     - repository: template-script-machine
       type: git
       name: External-Scripts/template-machine
