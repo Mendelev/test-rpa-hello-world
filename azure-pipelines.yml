@@ -64,9 +64,9 @@ jobs:
   dependsOn:
     - CreateMachine 
     - RunWorkflowAnalyzer
+  condition: succeededOrFailed('RunWorkflowAnalyzer')
   variables:
     InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
-  condition: succeeded('RunWorkflowAnalyzer')
   pool:
     vmImage: 'ubuntu-latest'
   steps:
@@ -74,7 +74,7 @@ jobs:
 - job: BuildAndPublish
   dependsOn:
     - TerminateMachine
-  continueOnError: true
+  condition: succeeded('RunWorkflowAnalyzer')
   pool:
     vmImage: 'windows-latest'
   steps:
@@ -86,7 +86,8 @@ jobs:
 - job: SendResults
   dependsOn:
     - BuildAndPublish
-  continueOnError: true
+    - TerminateMachine
+  condition: succeededOrFailed('TerminateMachine')
   pool:
     vmImage: 'windows-latest'
   steps:
