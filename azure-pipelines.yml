@@ -41,14 +41,14 @@ resources:
 
 jobs:
 - job: CreateMachine
-  condition: eq(VarRunWorkflowAnalyzer,true)
+  condition: eq(variables['VarRunWorkflowAnalyzer'],true)
   pool:
     vmImage: 'ubuntu-latest'
   steps:
   - template: python-script-create-vm.yml@template-script-machine  # Template reference 
 - job: RunWorkflowAnalyzer
   dependsOn: CreateMachine
-  condition: and(succeeded('CreateMachine'), eq(VarRunWorkflowAnalyzer,true))
+  condition: and(succeeded('CreateMachine'), eq(variables['VarRunWorkflowAnalyzer'],true))
   variables:
     InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
   pool: 
@@ -61,7 +61,7 @@ jobs:
   dependsOn:
     - CreateMachine 
     - RunWorkflowAnalyzer
-  condition: and(succeededOrFailed('RunWorkflowAnalyzer'), eq(VarRunWorkflowAnalyzer,true))
+  condition: and(succeededOrFailed('RunWorkflowAnalyzer'), eq(variables['VarRunWorkflowAnalyzer'],true))
   variables:
     InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
   pool:
@@ -71,7 +71,7 @@ jobs:
 - job: BuildAndPublish
   dependsOn:
     - TerminateMachine
-  condition: and(succeeded('RunWorkflowAnalyzer'), eq(VarRunWorkflowAnalyzer,true))
+  condition: and(succeeded('RunWorkflowAnalyzer'), eq(variables['VarRunWorkflowAnalyzer'],true))
   pool:
     vmImage: 'windows-latest'
   steps:
