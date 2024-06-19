@@ -18,6 +18,9 @@ variables:
   value: Shared
 - name: createProcessBoolean
   value: true
+- name: RunWorkflowAnalyzer #If true, runs workflow analyzer
+  value: true
+
 
 
 
@@ -52,14 +55,7 @@ jobs:
     demands:
     - agent.name -equals workflow-analyzer-agent-$(InstanceID)
   steps:
-  - checkout: self
-  - task: PowerShell@2
-    inputs:
-      targetType: 'inline'
-      script: |
-        $projectPath = "$Env:BUILD_SOURCESDIRECTORY"
-
-        & 'C:\Users\Administrator\AppData\Local\Programs\UiPath\Studio\UiPath.Studio.CommandLine.exe' analyze -p "$projectPath\project.json"
+  - template: workflow-analyzer.yml@template-uipath  # Template reference 
 - job: TerminateMachine
   dependsOn:
     - CreateMachine 

@@ -3,8 +3,8 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- main
+#trigger:
+#- main
 
 pool:
   vmImage: ubuntu-latest
@@ -23,6 +23,11 @@ variables:
 
 resources:
   repositories:
+    - repository: scripts-repository
+      endpoint: Test-Permission
+      type: git
+      name: External-Scripts/Criar-Excluir-Maquina
+      ref: main
     - repository: template-script-machine
       type: git
       name: External-Scripts/template-machine
@@ -59,9 +64,9 @@ jobs:
   dependsOn:
     - CreateMachine 
     - RunWorkflowAnalyzer
+  condition: succeededOrFailed('RunWorkflowAnalyzer')
   variables:
     InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
-  condition: succeeded('RunWorkflowAnalyzer')
   pool:
     vmImage: 'ubuntu-latest'
   steps:
@@ -69,6 +74,7 @@ jobs:
 - job: BuildAndPublish
   dependsOn:
     - TerminateMachine
+  condition: succeeded('RunWorkflowAnalyzer')
   pool:
     vmImage: 'windows-latest'
   steps:
@@ -80,11 +86,11 @@ jobs:
 - job: SendResults
   dependsOn:
     - BuildAndPublish
-  continueOnError: true
+    - TerminateMachine
+  condition: succeededOrFailed('TerminateMachine')
   pool:
     vmImage: 'windows-latest'
   steps:
   - template: send-results.yml@template-uipath
     parameters:
       email: '$(emailToReceiveResults)'
-
