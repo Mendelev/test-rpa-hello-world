@@ -84,7 +84,7 @@ jobs:
   dependsOn:
     - BuildAndPublish
     - TerminateMachine
-  condition: succeededOrFailed('TerminateMachine')
+  condition: or(eq(variables['VarRunWorkflowAnalyzer'],false),succeededOrFailed('TerminateMachine')
   pool:
     vmImage: 'windows-latest'
   steps:
