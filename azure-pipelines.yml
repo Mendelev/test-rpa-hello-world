@@ -19,7 +19,7 @@ variables:
 - name: createProcessBoolean
   value: true
 - name: VarRunWorkflowAnalyzer #If true, runs workflow analyzer
-  value: false
+  value: true
 
 
 
