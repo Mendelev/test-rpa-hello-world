@@ -73,8 +73,10 @@ jobs:
   dependsOn: GenerateRulesFile
   condition: and(succeeded('GenerateRulesFile'), eq(variables['VarRunWorkflowAnalyzer'],true))
   variables:
-    InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
-    caminho: $[ dependencies.GenerateRulesFile.outputs['GenerateRulesFileStep.caminho'] ]
+    - name: InstanceID
+      value: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
+    - name: caminho
+      value: $[ dependencies.GenerateRulesFile.outputs['GenerateRulesFileStep.caminho'] ]
   pool: 
     name: Workflow-Analyzer
     demands:
