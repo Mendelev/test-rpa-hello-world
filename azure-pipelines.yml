@@ -70,7 +70,9 @@ jobs:
 ## Job that runs workflow analyzer on the machine created in the previous step
 
 - job: RunWorkflowAnalyzer
-  dependsOn: GenerateRulesFile
+  dependsOn: 
+    - GenerateRulesFile
+    - CreateMachine
   condition: and(succeeded('GenerateRulesFile'), eq(variables['VarRunWorkflowAnalyzer'],true))
   variables:
     - name: InstanceID
