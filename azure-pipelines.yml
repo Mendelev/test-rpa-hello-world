@@ -26,6 +26,10 @@ variables:
 
 resources:
   repositories:
+    - repository: project-rules-workflow-analyzer
+      endpoint: Github
+      type: github
+      name: smarthis-ai/Smarthis.UiPathWFARules
     - repository: scripts-repository
       endpoint: Test-Permission
       type: git
@@ -40,23 +44,46 @@ resources:
 
 
 jobs:
+
+## Job that creates a Windows Machine on AWS to run Workflow Analyzer and get its instance ID
+
 - job: CreateMachine
   condition: eq(variables['VarRunWorkflowAnalyzer'],true)
   pool:
     vmImage: 'ubuntu-latest'
   steps:
   - template: python-script-create-vm.yml@template-script-machine  # Template reference 
-- job: RunWorkflowAnalyzer
+
+- job: GenerateRulesFile
   dependsOn: CreateMachine
   condition: and(succeeded('CreateMachine'), eq(variables['VarRunWorkflowAnalyzer'],true))
   variables:
     InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
+  pool:
+    name: Workflow-Analyzer
+    demands:
+    - agent.name -equals workflow-analyzer-agent-$(InstanceID)
+  steps:
+  - template: generate-rules-file.yml@template-uipath
+    
+
+## Job that runs workflow analyzer on the machine created in the previous step
+
+- job: RunWorkflowAnalyzer
+  dependsOn: GenerateRulesFile
+  condition: and(succeeded('GenerateRulesFile'), eq(variables['VarRunWorkflowAnalyzer'],true))
+  variables:
+    InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
+    caminho: $[ dependencies.GenerateRulesFile.outputs['GenerateRulesFileStep.caminho'] ]
   pool: 
     name: Workflow-Analyzer
     demands:
     - agent.name -equals workflow-analyzer-agent-$(InstanceID)
   steps:
   - template: workflow-analyzer.yml@template-uipath  # Template reference 
+
+## Job that deletes the windows machine on AWS
+
 - job: TerminateMachine
   dependsOn:
     - CreateMachine 
@@ -68,6 +95,9 @@ jobs:
     vmImage: 'ubuntu-latest'
   steps:
   - template: python-script-delete-vm.yml@template-script-machine
+
+## Job that generates the package and publish on Uipath Orchestator
+
 - job: BuildAndPublish
   dependsOn:
     - TerminateMachine
@@ -80,6 +110,9 @@ jobs:
       connection: $(connection) # You need to change this with your Orchestrator Connection Name
       FolderName: '$(FolderName)'
       createProcessBoolean: '$(createProcessBoolean)'
+
+## Job that send results of pipeline to email. This job runs even if previous jobs fails
+
 - job: SendResults
   dependsOn:
     - BuildAndPublish
