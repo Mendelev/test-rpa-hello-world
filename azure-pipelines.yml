@@ -87,8 +87,9 @@ jobs:
 - job: TerminateMachine
   dependsOn:
     - CreateMachine 
+    - GenerateRulesFile
     - RunWorkflowAnalyzer
-  condition: and(succeededOrFailed('RunWorkflowAnalyzer'), eq(variables['VarRunWorkflowAnalyzer'],true))
+  condition: and(or(succeededOrFailed('GenerateRulesFile'),succeededOrFailed('RunWorkflowAnalyzer')), eq(variables['VarRunWorkflowAnalyzer'],true))
   variables:
     InstanceID: $[ dependencies.CreateMachine.outputs['runScriptThatCreatesMachine.INSTANCE_ID'] ]
   pool:
