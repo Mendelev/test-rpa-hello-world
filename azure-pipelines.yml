@@ -107,7 +107,7 @@ jobs:
 - job: GenerateResultsAndSendEmail
   dependsOn:
     - TerminateMachine
-  condition: eq(variables['VarRunWorkflowAnalyzer'],true))
+  condition: eq(variables['VarRunWorkflowAnalyzer'],true)
   pool:
     vmImage: 'ubuntu-latest'
   steps:
