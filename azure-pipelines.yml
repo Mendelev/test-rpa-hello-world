@@ -120,6 +120,7 @@ jobs:
 - job: BuildAndPublish
   dependsOn:
     - GenerateResultsAndSendEmail
+  condition: succeededOrFailed('GenerateResultsAndSendEmail')
   #condition: or(succeeded('RunWorkflowAnalyzer'), eq(variables['VarRunWorkflowAnalyzer'],false))
   pool:
     vmImage: 'windows-latest'
