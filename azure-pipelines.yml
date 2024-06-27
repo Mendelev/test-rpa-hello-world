@@ -112,7 +112,7 @@ jobs:
     vmImage: 'ubuntu-latest'
   steps:
   - template: generate_html_from_json_output.yml@template-uipath  # Template reference
-  - template: send-results-python.yml.yml@template-uipath  # Template reference
+  - template: send-results-python.yml@template-uipath  # Template reference
 
 
 ## Job that generates the package and publish on Uipath Orchestator
