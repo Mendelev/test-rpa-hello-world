@@ -114,7 +114,7 @@ jobs:
   - template: generate_html_from_json_output.yml@template-uipath  # Template reference
   - template: send-results-python.yml@template-uipath  # Template reference
     parameters:
-      email: '$(emailToReceiveResults)'
+      emailToReceiveResults: '$(emailToReceiveResults)'
 
 ## Job that generates the package and publish on Uipath Orchestator
 
