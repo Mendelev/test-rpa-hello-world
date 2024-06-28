@@ -19,8 +19,10 @@ variables:
   value: Shared
 - name: createProcessBoolean
   value: true
+- name: VarRunWorkflowAnalyzer #If true, runs workflow analyzer
+  value: true
 - name: WorkflowAnalyzerShouldFailPipeline
-  value: false
+  value: true
 
 
 
