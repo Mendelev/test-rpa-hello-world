@@ -19,8 +19,8 @@ variables:
   value: Shared
 - name: createProcessBoolean
   value: true
-- name: VarRunWorkflowAnalyzer #If true, runs workflow analyzer
-  value: true
+- name: WorkflowAnalyzerShouldFailPipeline
+  value: false
 
 
 
@@ -121,7 +121,8 @@ jobs:
 - job: BuildAndPublish
   dependsOn:
     - GenerateResultsAndSendEmail
-  condition: succeededOrFailed('GenerateResultsAndSendEmail')
+  condition: not(and(eq(succeeded('RunWorkflowAnalyzer'),'false'),eq(variables['WorkflowAnalyzerShouldFailPipeline'],'true')))
+    #condition: eq(and(succeeded('RunWorkflowAnalyzer'), variables['WorkflowAnalyzerShouldFailPipeline']),'false')
   #condition: or(succeeded('RunWorkflowAnalyzer'), eq(variables['VarRunWorkflowAnalyzer'],false))
   pool:
     vmImage: 'windows-latest'
