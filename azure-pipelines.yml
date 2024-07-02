@@ -124,7 +124,7 @@ jobs:
 - job: BuildAndPublish
   dependsOn:
     - GenerateResultsAndSendEmail
-  condition: not(and(eq(succeeded('RunWorkflowAnalyzer'),'false'),eq(variables['WorkflowAnalyzerShouldFailPipeline'],'true')))
+  condition: not(and(eq(succeeded('RunWorkflowAnalyzer'),false),eq(variables['WorkflowAnalyzerShouldFailPipeline'],'true')))
     #condition: eq(and(succeeded('RunWorkflowAnalyzer'), variables['WorkflowAnalyzerShouldFailPipeline']),'false')
   #condition: or(succeeded('RunWorkflowAnalyzer'), eq(variables['VarRunWorkflowAnalyzer'],false))
   pool:
