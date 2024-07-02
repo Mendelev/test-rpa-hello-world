@@ -117,6 +117,9 @@ jobs:
   - template: send-results-python.yml@template-uipath  # Template reference
     parameters:
       emailToReceiveResults: '$(emailToReceiveResults)'
+      SMTP_USERNAME: '$(SMTP_USERNAME)'
+      SMTP_PASSWORD: '$(SMTP_PASSWORD)'
+
 
 ## Job that generates the package and publish on Uipath Orchestator
 
